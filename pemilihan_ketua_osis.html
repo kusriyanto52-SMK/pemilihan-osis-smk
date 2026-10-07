@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pemilihan Ketua OSIS</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f6fb;color:#172033}
+header{background:#1457d9;color:white;padding:22px;text-align:center}
+header h1{margin:0 0 6px;font-size:28px}
+header p{margin:0;opacity:.9}
+nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;background:white;padding:12px;box-shadow:0 2px 8px #0001;position:sticky;top:0;z-index:5}
+button,.btn{border:0;border-radius:8px;padding:10px 15px;cursor:pointer;font-weight:700}
+.navbtn{background:#e8eefb;color:#1647a5}.navbtn.active{background:#1457d9;color:white}
+main{max-width:1100px;margin:22px auto;padding:0 15px}
+.page{display:none}.page.active{display:block}
+.card{background:white;border-radius:14px;padding:20px;margin-bottom:18px;box-shadow:0 3px 15px #0000000c}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.stat{padding:20px;border-radius:12px;background:#eef4ff;border-left:5px solid #1457d9}
+.stat b{font-size:28px;display:block;margin-top:6px}
+input,textarea{width:100%;padding:11px;border:1px solid #ccd4e2;border-radius:8px;margin:5px 0 12px;font:inherit}
+textarea{min-height:90px;resize:vertical}
+.primary{background:#1457d9;color:white}.success{background:#16864b;color:white}.danger{background:#d83b3b;color:white}.secondary{background:#e9edf5}
+.candidates{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.candidate{border:2px solid #e0e6f0;border-radius:14px;padding:18px;text-align:center;transition:.15s}
+.candidate:hover{border-color:#1457d9;transform:translateY(-2px)}
+.photo{width:100px;height:100px;border-radius:50%;object-fit:cover;background:#e8edf6;margin:auto;display:block}
+.number{font-size:24px;font-weight:800;color:#1457d9;margin:8px}
+.badge{display:inline-block;background:#eef4ff;color:#1457d9;padding:5px 9px;border-radius:20px;font-size:12px}
+table{width:100%;border-collapse:collapse}th,td{padding:11px;border-bottom:1px solid #e5e9f0;text-align:left}th{background:#f6f8fc}
+.barwrap{background:#e8edf5;border-radius:10px;overflow:hidden;height:22px}.bar{height:100%;background:#1457d9}
+.notice{padding:12px;border-radius:8px;background:#fff6d9;color:#715500;margin-bottom:15px}
+.modal{display:none;position:fixed;inset:0;background:#0008;align-items:center;justify-content:center;padding:20px;z-index:20}
+.modal.show{display:flex}.modalbox{background:white;border-radius:14px;padding:25px;max-width:500px;width:100%;text-align:center}
+.small{font-size:13px;color:#68758b}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+hr{border:0;border-top:1px solid #e5e9f0;margin:20px 0}
+@media(max-width:600px){header h1{font-size:22px}.card{padding:15px}table{font-size:13px}}
+@media print{nav,.no-print,.actions,header{display:none!important}.page{display:block!important}.card{box-shadow:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1 id="schoolTitle">Pemilihan Ketua OSIS</h1>
+  <p id="periodTitle">Tahun Pelajaran 2026/2027</p>
+</header>
+
+<nav class="no-print">
+  <button class="navbtn active" onclick="showPage('home',this)">🏠 Beranda</button>
+  <button class="navbtn" onclick="showPage('voting',this)">🗳️ Voting</button>
+  <button class="navbtn" onclick="showPage('results',this)">📊 Hasil</button>
+  <button class="navbtn" onclick="showPage('admin',this)">⚙️ Admin</button>
+</nav>
+
+<main>
+<section id="home" class="page active">
+  <div class="card">
+    <h2>Selamat Datang</h2>
+    <p>Gunakan aplikasi ini untuk melaksanakan pemilihan Ketua OSIS secara sederhana. Semua data tersimpan di browser perangkat ini.</p>
+    <div class="notice">⚠️ Karena aplikasi ini hanya satu file HTML, data tersimpan secara lokal. Untuk pemilihan nyata di beberapa perangkat, diperlukan server/database bersama.</div>
+  </div>
+  <div class="grid">
+    <div class="stat">Jumlah Calon<b id="statCandidates">0</b></div>
+    <div class="stat">Jumlah Pemilih Terdaftar<b id="statVoters">0</b></div>
+    <div class="stat">Suara Masuk<b id="statVotes">0</b></div>
+    <div class="stat">Belum Memilih<b id="statRemaining">0</b></div>
+  </div>
+  <div class="card">
+    <h3>Daftar Calon</h3>
+    <div id="homeCandidates" class="candidates"></div>
+  </div>
+</section>
+
+<section id="voting" class="page">
+  <div class="card">
+    <h2>🗳️ Pemungutan Suara</h2>
+    <p>Masukkan nomor/NIS siswa. Satu nomor hanya dapat digunakan satu kali.</p>
+    <label><b>Nomor/NIS Siswa</b></label>
+    <input id="voterId" placeholder="Contoh: 00123" autocomplete="off">
+    <div id="votingCandidates" class="candidates"></div>
+  </div>
+</section>
+
+<section id="results" class="page">
+  <div class="card">
+    <div class="actions no-print">
+      <button class="primary" onclick="renderResults()">🔄 Perbarui</button>
+      <button class="secondary" onclick="window.print()">🖨️ Cetak Hasil</button>
+    </div>
+    <h2>📊 Hasil Penghitungan Suara</h2>
+    <p id="resultSummary"></p>
+    <div id="resultTable"></div>
+  </div>
+</section>
+
+<section id="admin" class="page">
+  <div class="card">
+    <h2>⚙️ Pengaturan Pemilihan</h2>
+    <label>Nama Sekolah</label>
+    <input id="schoolInput">
+    <label>Tahun Pelajaran / Periode</label>
+    <input id="periodInput">
+    <button class="primary" onclick="saveSettings()">Simpan Pengaturan</button>
+  </div>
+
+  <div class="card">
+    <h2>👤 Tambah Calon</h2>
+    <label>Nomor Urut</label><input id="candidateNumber" type="number" min="1" placeholder="1">
+    <label>Nama Calon</label><input id="candidateName" placeholder="Nama lengkap">
+    <label>Foto (URL, opsional)</label><input id="candidatePhoto" placeholder="https://...">
+    <label>Visi & Misi</label><textarea id="candidateVision" placeholder="Visi dan misi calon"></textarea>
+    <button class="success" onclick="addCandidate()">➕ Tambah Calon</button>
+  </div>
+
+  <div class="card">
+    <h2>Daftar Calon</h2>
+    <div id="adminCandidates"></div>
+  </div>
+
+  <div class="card">
+    <h2>👥 Daftar Pemilih</h2>
+    <p class="small">Masukkan satu nomor/NIS per baris.</p>
+    <textarea id="voterList" placeholder="001&#10;002&#10;003"></textarea>
+    <button class="primary" onclick="saveVoters()">💾 Simpan Daftar Pemilih</button>
+  </div>
+
+  <div class="card">
+    <h2>⚠️ Pengelolaan Data</h2>
+    <p>Reset suara akan menghapus seluruh suara yang sudah masuk, tetapi tidak menghapus calon dan daftar pemilih.</p>
+    <button class="danger" onclick="resetVotes()">🗑️ Reset Semua Suara</button>
+    <button class="danger" onclick="resetAll()">♻️ Reset Seluruh Aplikasi</button>
+  </div>
+</section>
+</main>
+
+<div id="modal" class="modal">
+  <div class="modalbox">
+    <h2>Konfirmasi Suara</h2>
+    <p id="confirmText"></p>
+    <div class="actions" style="justify-content:center">
+      <button class="secondary" onclick="closeModal()">Batal</button>
+      <button class="success" onclick="confirmVote()">Ya, Kirim Suara</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const KEY='osis_voting_app_v1';
+let pendingCandidate=null;
+
+const defaultData={
+  settings:{school:'Pemilihan Ketua OSIS',period:'Tahun Pelajaran 2026/2027'},
+  candidates:[
+    {id:'c1',number:1,name:'Calon 1',photo:'',vision:'Visi dan misi calon 1',votes:0},
+    {id:'c2',number:2,name:'Calon 2',photo:'',vision:'Visi dan misi calon 2',votes:0}
+  ],
+  voters:[],
+  voted:[]
+};
+
+function load(){
+  try{return JSON.parse(localStorage.getItem(KEY))||structuredClone(defaultData)}
+  catch(e){return structuredClone(defaultData)}
+}
+let data=load();
+
+function save(){localStorage.setItem(KEY,JSON.stringify(data));updateAll()}
+
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.navbtn').forEach(x=>x.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  if(id==='results')renderResults();
+  if(id==='admin')renderAdmin();
+}
+
+function updateAll(){
+  document.getElementById('schoolTitle').textContent=data.settings.school;
+  document.getElementById('periodTitle').textContent=data.settings.period;
+  document.getElementById('statCandidates').textContent=data.candidates.length;
+  document.getElementById('statVoters').textContent=data.voters.length;
+  const votes=data.candidates.reduce((a,c)=>a+c.votes,0);
+  document.getElementById('statVotes').textContent=votes;
+  document.getElementById('statRemaining').textContent=Math.max(0,data.voters.length-data.voted.length);
+  renderHomeCandidates(); renderVoting(); renderAdmin();
+}
+
+function renderHomeCandidates(){
+  document.getElementById('homeCandidates').innerHTML=data.candidates.map(c=>candidateCard(c,false)).join('');
+}
+
+function candidateCard(c,vote){
+  const photo=c.photo?`<img class="photo" src="${escAttr(c.photo)}" onerror="this.style.display='none'">`:`<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:34px">👤</div>`;
+  return `<div class="candidate">${photo}<div class="number">${esc(c.number)}</div><h3>${esc(c.name)}</h3><span class="badge">Calon Ketua OSIS</span><p class="small">${esc(c.vision||'')}</p>${vote?`<button class="primary" onclick="startVote('${c.id}')">Pilih Calon Ini</button>`:''}</div>`;
+}
+
+function renderVoting(){
+  const box=document.getElementById('votingCandidates');
+  box.innerHTML=data.candidates.length?data.candidates.map(c=>candidateCard(c,true)).join('<br>'):'<p>Belum ada calon.</p>';
+}
+
+function startVote(id){
+  const voter=document.getElementById('voterId').value.trim();
+  if(!voter){alert('Masukkan nomor/NIS siswa terlebih dahulu.');document.getElementById('voterId').focus();return}
+  if(data.voters.length && !data.voters.includes(voter)){alert('Nomor/NIS tersebut tidak terdaftar sebagai pemilih.');return}
+  if(data.voted.includes(voter)){alert('Nomor/NIS tersebut sudah menggunakan hak pilih.');return}
+  pendingCandidate=id;
+  const c=data.candidates.find(x=>x.id===id);
+  document.getElementById('confirmText').innerHTML=`Anda memilih <b>Nomor ${esc(c.number)} – ${esc(c.name)}</b>.<br><br>Suara yang sudah dikirim tidak dapat diubah.`;
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal(){document.getElementById('modal').classList.remove('show');pendingCandidate=null}
+
+function confirmVote(){
+  const voter=document.getElementById('voterId').value.trim();
+  const c=data.candidates.find(x=>x.id===pendingCandidate);
+  if(!c||!voter)return;
+  if(data.voted.includes(voter)){closeModal();alert('Pemilih sudah memilih.');return}
+  c.votes++;data.voted.push(voter);save();
+  closeModal();document.getElementById('voterId').value='';
+  alert('Terima kasih. Suara Anda berhasil direkam.');
+}
+
+function renderResults(){
+  const total=data.candidates.reduce((a,c)=>a+c.votes,0);
+  document.getElementById('resultSummary').textContent=`Total suara masuk: ${total} dari ${data.voters.length||'—'} pemilih terdaftar.`;
+  const sorted=[...data.candidates].sort((a,b)=>b.votes-a.votes);
+  document.getElementById('resultTable').innerHTML=sorted.length?`
+    <table><thead><tr><th>No</th><th>Calon</th><th>Suara</th><th>Persentase</th><th>Grafik</th></tr></thead>
+    <tbody>${sorted.map(c=>{
+      const pct=total?((c.votes/total)*100):0;
+      return `<tr><td>${esc(c.number)}</td><td><b>${esc(c.name)}</b></td><td>${c.votes}</td><td>${pct.toFixed(2)}%</td><td><div class="barwrap"><div class="bar" style="width:${pct}%"></div></div></td></tr>`
+    }).join('')}</tbody></table>`:'<p>Belum ada calon.</p>';
+}
+
+function saveSettings(){
+  data.settings.school=document.getElementById('schoolInput').value.trim()||'Pemilihan Ketua OSIS';
+  data.settings.period=document.getElementById('periodInput').value.trim()||'Tahun Pelajaran';
+  save();alert('Pengaturan disimpan.');
+}
+
+function addCandidate(){
+  const number=Number(document.getElementById('candidateNumber').value);
+  const name=document.getElementById('candidateName').value.trim();
+  const photo=document.getElementById('candidatePhoto').value.trim();
+  const vision=document.getElementById('candidateVision').value.trim();
+  if(!number||!name){alert('Nomor urut dan nama calon wajib diisi.');return}
+  if(data.candidates.some(c=>c.number===number)){alert('Nomor urut sudah digunakan.');return}
+  data.candidates.push({id:'c'+Date.now(),number,name,photo,vision,votes:0});
+  document.getElementById('candidateNumber').value='';
+  document.getElementById('candidateName').value='';
+  document.getElementById('candidatePhoto').value='';
+  document.getElementById('candidateVision').value='';
+  save();alert('Calon berhasil ditambahkan.');
+}
+
+function deleteCandidate(id){
+  const c=data.candidates.find(x=>x.id===id);
+  if(confirm(`Hapus calon ${c.name}?`)){data.candidates=data.candidates.filter(x=>x.id!==id);save()}
+}
+
+function renderAdmin(){
+  document.getElementById('schoolInput').value=data.settings.school;
+  document.getElementById('periodInput').value=data.settings.period;
+  document.getElementById('voterList').value=data.voters.join('\n');
+  document.getElementById('adminCandidates').innerHTML=data.candidates.length?`
+  <table><thead><tr><th>No</th><th>Nama</th><th>Suara</th><th>Aksi</th></tr></thead><tbody>
+  ${data.candidates.map(c=>`<tr><td>${esc(c.number)}</td><td>${esc(c.name)}</td><td>${c.votes}</td><td><button class="danger" onclick="deleteCandidate('${c.id}')">Hapus</button></td></tr>`).join('')}
+  </tbody></table>`:'<p>Belum ada calon.</p>';
+}
+
+function saveVoters(){
+  const ids=[...new Set(document.getElementById('voterList').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean))];
+  const removed= data.voted.filter(x=>!ids.includes(x));
+  if(removed.length){alert('Daftar pemilih tidak boleh menghapus pemilih yang sudah memberikan suara.');return}
+  data.voters=ids;save();alert(`Daftar pemilih disimpan: ${ids.length} orang.`);
+}
+
+function resetVotes(){
+  if(!confirm('Yakin ingin menghapus SEMUA suara? Tindakan ini tidak dapat dibatalkan.'))return;
+  data.candidates.forEach(c=>c.votes=0);data.voted=[];save();alert('Semua suara telah direset.');
+}
+
+function resetAll(){
+  if(!confirm('Yakin ingin menghapus seluruh data aplikasi, termasuk calon dan pemilih?'))return;
+  localStorage.removeItem(KEY);data=structuredClone(defaultData);updateAll();alert('Aplikasi dikembalikan ke kondisi awal.');
+}
+
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function escAttr(s){return esc(s).replace(/`/g,'&#096;')}
+
+updateAll();
+</script>
+</body>
+</html>

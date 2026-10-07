@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pemilihan Ketua OSIS</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            50: '#eff6ff',
+            100: '#dbeafe',
+            500: '#3b82f6',
+            600: '#2563eb',
+            700: '#1d4ed8',
+            800: '#1e40af',
+          }
+        },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+:root {
+  --primary-color: #2563eb;
+  --primary-dark: #1d4ed8;
+  --bg-color: #f8fafc;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-color);
+  color: #0f172a;
+}
+
+/* Custom dynamic theme color updates */
+.theme-bg-primary { background-color: var(--primary-color) !important; }
+.theme-text-primary { color: var(--primary-color) !important; }
+.theme-border-primary { border-color: var(--primary-color) !important; }
+
+/* Custom Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Glassmorphism effects */
+.glass-header {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white !important; color: black !important; }
+  .page { display: block !important; }
+  .page:not(#resultsPage) { display: none !important; }
+  .print-shadow-none { box-shadow: none !important; border: 1px solid #e2e8f0; }
+}
+</style>
+</head>
+
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-200">
+
+<!-- Header & Top Navigation Bar -->
+<header class="sticky top-0 z-40 w-full glass-header border-b border-slate-200/80 shadow-sm transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      
+      <!-- Logo & Branding -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="showPage('homePage')">
+        <div id="topLogoWrapper" class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white shadow-sm border border-slate-100 flex items-center justify-center p-1 overflow-hidden">
+          <img id="topLogo" class="w-full h-full object-contain" src="" alt="Logo Sekolah" onerror="this.src='https://placehold.co/100x100/2563eb/ffffff?text=OSIS'">
+        </div>
+        <div>
+          <h1 id="schoolTop" class="font-extrabold text-slate-900 text-sm md:text-base leading-tight">Nama Sekolah</h1>
+          <p id="titleTop" class="text-xs text-slate-500 font-medium">Pemilihan Ketua OSIS</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center gap-1 sm:gap-2">
+        <button onclick="showPage('homePage')" id="nav-homePage" class="nav-btn px-3 py-2 rounded-lg text-xs md:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-house text-sm"></i>
+          <span class="hidden sm:inline">Beranda</span>
+        </button>
+        <button onclick="showPage('votePage')" id="nav-votePage" class="nav-btn px-3 py-2 rounded-lg text-xs md:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-check-to-slot text-sm"></i>
+          <span>Voting</span>
+        </button>
+        <button onclick="showPage('resultsPage')" id="nav-resultsPage" class="nav-btn px-3 py-2 rounded-lg text-xs md:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-chart-pie text-sm"></i>
+          <span>Hasil</span>
+        </button>
+        <button onclick="showPage('adminPage')" id="nav-adminPage" class="nav-btn px-3.5 py-2 rounded-lg text-xs md:text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-sm flex items-center gap-1.5">
+          <i class="fa-solid fa-user-gear text-sm"></i>
+          <span class="hidden sm:inline">Admin</span>
+        </button>
+      </nav>
+
+    </div>
+  </div>
+</header>
+
+<!-- Main Container -->
+<main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+
+<!-- =====================================================
+ HOME PAGE
+===================================================== -->
+<section id="homePage" class="page animate-fade-in space-y-8">
+  
+  <!-- Hero Section -->
+  <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white p-6 sm:p-10 md:p-12 shadow-xl shadow-blue-500/10">
+    <div class="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto space-y-4">
+      
+      <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white/10 backdrop-blur-md p-2.5 border border-white/20 shadow-2xl flex items-center justify-center">
+        <img id="heroLogo" class="w-full h-full object-contain rounded-xl" src="" alt="Logo OSIS" onerror="this.src='https://placehold.co/150x150/ffffff/2563eb?text=OSIS'">
+      </div>
+
+      <div class="space-y-1">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-white/20 text-white backdrop-blur-sm border border-white/20">
+          E-Voting Resmi
+        </span>
+        <h2 id="heroTitle" class="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
+          PEMILIHAN KETUA OSIS
+        </h2>
+        <p id="heroSchool" class="text-blue-100 text-base sm:text-lg font-medium">
+          Nama Sekolah
+        </p>
+      </div>
+
+      <p class="text-sm sm:text-base text-blue-100/90 max-w-xl">
+        Gunakan hak pilih Anda secara jujur, adil, dan bertanggung jawab untuk menentukan masa depan kepemimpinan OSIS periode mendatang.
+      </p>
+
+      <div class="pt-2">
+        <button onclick="showPage('votePage')" class="px-8 py-4 rounded-xl bg-white text-blue-600 hover:bg-blue-50 font-bold text-base shadow-lg shadow-black/10 hover:shadow-xl transition-all transform active:scale-95 flex items-center gap-2">
+          <i class="fa-solid fa-vote-yea text-lg"></i>
+          <span>MULAI VOTING SEKARANG</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Decorative background elements -->
+    <div class="absolute -top-24 -left-24 w-72 h-72 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+  </div>
+
+  <!-- Information Alert Box -->
+  <div class="flex items-start gap-3 p-4 sm:p-5 rounded-2xl bg-amber-50 border border-amber-200/80 text-amber-900 shadow-sm">
+    <div class="p-2 rounded-xl bg-amber-100 text-amber-700 flex-shrink-0">
+      <i class="fa-solid fa-circle-info text-xl"></i>
+    </div>
+    <div class="text-sm leading-relaxed">
+      <h4 class="font-bold text-amber-950 text-base mb-0.5">Petunjuk Pemungutan Suara</h4>
+      <p>
+        Setiap siswa terdaftar memiliki 1 hak suara. Siapkan <strong>Nomor Induk Siswa (NIS)</strong> yang terdaftar untuk memverifikasi identitas Anda di menu Voting. Jika NIS belum terdaftar, harap hubungi panitia administrator.
+      </p>
+    </div>
+  </div>
+
+  <!-- Candidates Preview Heading -->
+  <div class="flex items-center justify-between pt-4">
+    <div>
+      <h3 class="text-xl font-bold text-slate-900">Kandidat Ketua OSIS</h3>
+      <p class="text-xs sm:text-sm text-slate-500">Kenali visi dan misi dari para calon pemimpin sebelum menentukan pilihan Anda.</p>
+    </div>
+  </div>
+
+  <!-- Candidates List Grid -->
+  <div id="homeCandidates" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+</section>
+
+<!-- =====================================================
+ VOTING PAGE
+===================================================== -->
+<section id="votePage" class="page animate-fade-in space-y-6">
+
+  <!-- Step 1: NIS Form Screen -->
+  <div id="voterForm" class="max-w-md mx-auto my-8">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xl shadow-slate-200/50 space-y-6 text-center">
+      
+      <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 mx-auto flex items-center justify-center text-3xl shadow-inner">
+        <i class="fa-solid fa-id-card"></i>
+      </div>
+
+      <div class="space-y-1">
+        <h2 class="text-2xl font-black text-slate-900">Verifikasi Pemilih</h2>
+        <p class="text-sm text-slate-500">Masukkan Nomor Induk Siswa (NIS) Anda untuk mulai menentukan pilihan.</p>
+      </div>
+
+      <form onsubmit="event.preventDefault(); startVoting();" class="space-y-4 text-left">
+        <div>
+          <label for="voterNIS" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Nomor Induk Siswa (NIS)</label>
+          <div class="relative">
+            <input id="voterNIS" type="text" inputmode="numeric" autocomplete="off" placeholder="Contoh: 12345" 
+                   class="w-full px-4 py-3.5 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-4 focus:ring-blue-100 text-slate-900 font-semibold tracking-wide outline-none transition-all pl-11">
+            <i class="fa-solid fa-hashtag absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm tracking-wide shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2">
+          <span>VERIFIKASI & LANJUTKAN</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+
+      <div class="pt-2 text-xs text-slate-400 border-t border-slate-100 flex items-center justify-center gap-1.5">
+        <i class="fa-solid fa-lock text-slate-400"></i>
+        <span>Sistem Pemilihan Dijamin Rahasia dan Aman</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Step 2: Candidates Selection Screen (Hidden initially) -->
+  <div id="voteCandidateArea" class="hidden space-y-6">
+
+    <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl font-bold">
+          <i class="fa-solid fa-user-check"></i>
+        </div>
+        <div>
+          <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Pemilih Terverifikasi</span>
+          <h3 class="text-lg font-bold text-slate-900">
+            <span id="currentVoterName">-</span>
+            <span class="text-slate-400 font-normal text-sm ml-1">(NIS: <span id="currentNIS">-</span>)</span>
+          </h3>
+        </div>
+      </div>
+
+      <button onclick="resetVoterScreen()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-2">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Ganti NIS / Batalkan</span>
+      </button>
+    </div>
+
+    <div class="text-center space-y-1">
+      <h2 class="text-2xl font-black text-slate-900">Pilih Calon Ketua OSIS</h2>
+      <p class="text-slate-500 text-sm">Klik tombol <strong>"Pilih Candidate"</strong> pada calon pilihan Anda.</p>
+    </div>
+
+    <!-- Candidate Grid for Voting -->
+    <div id="voteCandidates" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+  </div>
+
+</section>
+
+<!-- =====================================================
+ RESULTS PAGE
+===================================================== -->
+<section id="resultsPage" class="page animate-fade-in space-y-8">
+
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold mb-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>Perhitungan Suara Real-Time</span>
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Hasil Pemungutan Suara</h2>
+      <p id="resultSchool" class="text-sm text-slate-500">SMA / OSIS</p>
+    </div>
+
+    <div class="no-print flex items-center gap-3">
+      <button onclick="renderResults(); showToast('Data hasil diperbarui', 'info')" class="px-4 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 font-bold text-xs transition-all flex items-center gap-2 shadow-sm">
+        <i class="fa-solid fa-rotate text-sm"></i>
+        <span>Refresh Suara</span>
+      </button>
+      <button onclick="window.print()" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-md shadow-blue-500/20 flex items-center gap-2">
+        <i class="fa-solid fa-print text-sm"></i>
+        <span>Cetak Laporan</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Key Statistics Grid -->
+  <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+    
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-1">
+      <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Siswa</span>
+      <div id="registeredStudents" class="text-2xl sm:text-3xl font-black text-slate-900">0</div>
+      <span class="text-[11px] text-slate-500">Terdaftar di Database</span>
+    </div>
+
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-1">
+      <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Sudah Memilih</span>
+      <div id="totalVoters" class="text-2xl sm:text-3xl font-black text-emerald-600">0</div>
+      <span class="text-[11px] text-slate-500">Hak Suara Terpakai</span>
+    </div>
+
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-1">
+      <span class="text-xs font-bold uppercase tracking-wider text-rose-500">Belum Memilih</span>
+      <div id="notVoted" class="text-2xl sm:text-3xl font-black text-rose-500">0</div>
+      <span class="text-[11px] text-slate-500">Belum Menyalurkan Suara</span>
+    </div>
+
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-1">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Total Suara Masuk</span>
+      <div id="totalVotes" class="text-2xl sm:text-3xl font-black text-blue-600">0</div>
+      <span class="text-[11px] text-slate-500">Suara Sah Dikumpulkan</span>
+    </div>
+
+    <div class="col-span-2 lg:col-span-1 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-1">
+      <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Tingkat Partisipasi</span>
+      <div id="participation" class="text-2xl sm:text-3xl font-black text-indigo-600">0%</div>
+      <span class="text-[11px] text-slate-500">Persentase Pemilih</span>
+    </div>
+
+  </div>
+
+  <!-- Detailed Results Breakdown List -->
+  <div class="space-y-4">
+    <h3 class="text-lg font-bold text-slate-900">Perolehan Suara Kandidat</h3>
+    <div id="resultList" class="space-y-4"></div>
+  </div>
+
+  <!-- Visual Chart Comparison Bar Card -->
+  <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-bold text-slate-900">Visualisasi Perbandingan Suara</h3>
+        <p class="text-xs text-slate-500">Grafik batang persentase suara setiap calon</p>
+      </div>
+      <i class="fa-solid fa-chart-simple text-2xl text-slate-300"></i>
+    </div>
+
+    <div id="chart" class="space-y-6 pt-2"></div>
+  </div>
+
+</section>
+
+<!-- =====================================================
+ ADMIN PAGE
+===================================================== -->
+<section id="adminPage" class="page animate-fade-in space-y-8">
+
+  <!-- Admin Login Box (Displayed if not logged in) -->
+  <div id="loginBox" class="max-w-md mx-auto my-12">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xl shadow-slate-200/50 space-y-6">
+      
+      <div class="text-center space-y-2">
+        <div class="w-16 h-16 rounded-2xl bg-slate-900 text-white mx-auto flex items-center justify-center text-2xl shadow-md">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <h2 class="text-2xl font-black text-slate-900">Panel Admin</h2>
+        <p class="text-xs text-slate-500">Silakan masuk menggunakan kredensial administrator Anda.</p>
+      </div>
+
+      <form onsubmit="event.preventDefault(); loginAdmin();" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Username</label>
+          <input id="adminUser" type="text" value="admin" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-200 text-slate-900 font-medium text-sm outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Password</label>
+          <input id="adminPass" type="password" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-200 text-slate-900 font-medium text-sm outline-none">
+        </div>
+
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm tracking-wide shadow-md transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span>MASUK ADMIN</span>
+        </button>
+      </form>
+
+      <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center text-xs text-slate-500">
+        Default Login: <span class="font-bold text-slate-700">admin</span> / <span class="font-bold text-slate-700">osis123</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Admin Panel Content (Hidden until logged in) -->
+  <div id="adminPanel" class="hidden space-y-8">
+
+    <!-- Admin Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900 text-white p-6 rounded-3xl shadow-lg">
+      <div class="space-y-1">
+        <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider border border-blue-400/30">
+          Super Administrator
+        </span>
+        <h2 class="text-2xl font-black">Panel Kontrol Pemilihan</h2>
+        <p class="text-xs text-slate-400">Kelola database DPT siswa, calon ketua OSIS, serta pengaturan tampilan.</p>
+      </div>
+
+      <button onclick="logoutAdmin()" class="self-start sm:self-center px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10 flex items-center gap-2">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <span>Keluar Admin</span>
+      </button>
+    </div>
+
+    <!-- Section 1: Student Database Management -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+      
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">👨‍🎓 Database Daftar Pemilih Tetap (DPT)</h3>
+          <p class="text-xs text-slate-500">Hanya NIS yang terdaftar di bawah ini yang dapat menyalurkan suara.</p>
+        </div>
+      </div>
+
+      <!-- Add Student & Import Form Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- Manual Add Student Form -->
+        <div class="space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-200/80">
+          <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+            <i class="fa-solid fa-user-plus text-blue-600"></i>
+            <span>Tambah Siswa Manual</span>
+          </h4>
+
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">NIS</label>
+              <input id="studentNIS" placeholder="Contoh: 10001" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 text-slate-900 text-sm outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap</label>
+              <input id="studentName" placeholder="Contoh: Budi Pratama" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 text-slate-900 text-sm outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Kelas</label>
+              <input id="studentClass" placeholder="Contoh: XI IPA 1" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 text-slate-900 text-sm outline-none">
+            </div>
+
+            <button onclick="addStudent()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-sm flex items-center justify-center gap-2">
+              <i class="fa-solid fa-plus"></i>
+              <span>Simpan Siswa Baru</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CSV Import & Quick Sample Data Generator -->
+        <div class="space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+          <div class="space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <i class="fa-solid fa-file-csv text-blue-600"></i>
+              <span>Import Data Banyak (CSV)</span>
+            </h4>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Upload berkas CSV dengan format kolom: <code class="bg-slate-200 px-1.5 py-0.5 rounded text-slate-800 font-bold">NIS, Nama, Kelas</code>
+            </p>
+
+            <div class="pt-1 space-y-2">
+              <input type="file" id="csvFileInput" accept=".csv" onchange="importStudentsCSV(event)" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 cursor-pointer">
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-200/80 flex flex-wrap gap-2">
+            <button onclick="downloadCSVTemplate()" class="px-3.5 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs transition-all flex items-center gap-1.5">
+              <i class="fa-solid fa-download"></i>
+              <span>Template CSV</span>
+            </button>
+            <button onclick="generateSampleStudents()" class="px-3.5 py-2 rounded-xl bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 text-indigo-700 font-bold text-xs transition-all flex items-center gap-1.5">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>Isi 15 Siswa Contoh</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Student Table Header & Filters -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-slate-100">
+        <h4 class="font-bold text-slate-900 text-base">
+          Daftar DPT Siswa <span id="studentCount" class="ml-1.5 px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs">0</span>
+        </h4>
+
+        <div class="relative w-full sm:w-72">
+          <input id="studentSearch" oninput="renderStudents()" placeholder="Cari NIS, Nama, atau Kelas..." class="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 focus:border-blue-600 text-slate-900 text-xs outline-none">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+        </div>
+      </div>
+
+      <!-- Student List Table -->
+      <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              <th class="p-3.5">No</th>
+              <th class="p-3.5">NIS</th>
+              <th class="p-3.5">Nama Siswa</th>
+              <th class="p-3.5">Kelas</th>
+              <th class="p-3.5">Status Voting</th>
+              <th class="p-3.5 text-right">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="studentTable" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- Section 2: Candidates Management -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+      
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">👥 Kelola Data Calon Ketua OSIS</h3>
+          <p class="text-xs text-slate-500">Atur profil, foto, visi, dan misi seluruh kandidat.</p>
+        </div>
+
+        <button onclick="addNewCandidate()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all flex items-center gap-2">
+          <i class="fa-solid fa-plus"></i>
+          <span>Tambah Calon Baru</span>
+        </button>
+      </div>
+
+      <div id="candidateAdmin" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+
+    </div>
+
+    <!-- Section 3: Branding & Display Settings -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+      
+      <div class="border-b border-slate-100 pb-4">
+        <h3 class="text-lg font-bold text-slate-900">🎨 Pengaturan Tampilan & Identitas</h3>
+        <p class="text-xs text-slate-500">Sesuaikan nama sekolah, judul acara, warna tema, dan logo.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Sekolah</label>
+            <input id="schoolInput" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-sm outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Judul Pemilihan</label>
+            <input id="titleInput" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-sm outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Warna Tema Utama</label>
+            <div class="flex items-center gap-3">
+              <input id="colorInput" type="color" class="w-12 h-10 rounded-xl border border-slate-300 cursor-pointer p-0.5">
+              <span class="text-xs text-slate-500">Pilih warna aksen aplikasi</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Upload Logo Sekolah</label>
+            <input id="logoInput" type="file" accept="image/*" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200">
+            <img id="logoPreview" class="mt-2 w-16 h-16 object-contain rounded-xl border border-slate-200 p-1" src="">
+          </div>
+        </div>
+
+      </div>
+
+      <button onclick="saveSettings()" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-md flex items-center gap-2">
+        <i class="fa-solid fa-floppy-disk"></i>
+        <span>Simpan Pengaturan Tampilan</span>
+      </button>
+
+    </div>
+
+    <!-- Section 4: Data Backup & Reset Danger Zone -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- Backup & Restore -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-database text-blue-600"></i>
+          <span>Backup & Restore Data</span>
+        </h3>
+        <p class="text-xs text-slate-500 leading-relaxed">
+          Unduh seluruh salinan data pemilihan (termasuk DPT, calon, dan perolehan suara) sebagai file JSON.
+        </p>
+
+        <div class="flex flex-wrap gap-2 pt-2">
+          <button onclick="exportBackup()" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-sm flex items-center gap-1.5">
+            <i class="fa-solid fa-download"></i>
+            <span>Export Backup JSON</span>
+          </button>
+
+          <label class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all cursor-pointer flex items-center gap-1.5">
+            <i class="fa-solid fa-upload"></i>
+            <span>Restore JSON</span>
+            <input type="file" accept=".json" onchange="importBackup(event)" class="hidden">
+          </label>
+        </div>
+      </div>
+
+      <!-- Danger Zone Reset -->
+      <div class="bg-rose-50/50 rounded-3xl p-6 border border-rose-200/80 shadow-sm space-y-4">
+        <h3 class="text-base font-bold text-rose-950 flex items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
+          <span>Pengaturan Reset Pemilihan</span>
+        </h3>
+        <p class="text-xs text-rose-800/80 leading-relaxed">
+          Reset pemilihan akan mengosongkan seluruh perolehan suara kandidat dan mengembalikan status semua siswa menjadi <strong>Belum Memilih</strong>.
+        </p>
+
+        <div class="pt-2">
+          <button onclick="resetElection()" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition-all shadow-sm flex items-center gap-1.5">
+            <i class="fa-solid fa-trash-arrow-up"></i>
+            <span>RESET HASIL PEMILIHAN</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<!-- Footer -->
+<footer class="no-print border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-400">
+  <div class="max-w-7xl mx-auto px-4">
+    <p>© <span id="footerYear">2026</span> Sistem E-Voting Pemilihan Ketua OSIS • Jujur, Adil & Transparan</p>
+  </div>
+</footer>
+
+<!-- =====================================================
+ MODAL DIALOGS & TOAST NOTIFICATIONS
+===================================================== -->
+
+<!-- Generic Confirmation Modal (Replaces alert & confirm) -->
+<div id="appModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity duration-200">
+  <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5 animate-fade-in border border-slate-100">
+    <div id="appModalHeader" class="flex items-center gap-3">
+      <div id="appModalIcon" class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl font-bold flex-shrink-0">
+        <i class="fa-solid fa-circle-question"></i>
+      </div>
+      <div>
+        <h3 id="appModalTitle" class="text-lg font-bold text-slate-900">Konfirmasi</h3>
+        <p id="appModalSubtitle" class="text-xs text-slate-500">Harap periksa kembali detail Anda</p>
+      </div>
+    </div>
+
+    <div id="appModalBody" class="text-sm text-slate-600 leading-relaxed">
+      Apakah Anda yakin ingin melanjutkan tindakan ini?
+    </div>
+
+    <div id="appModalFooter" class="flex items-center justify-end gap-2 pt-2">
+      <button id="appModalCancelBtn" onclick="closeAppModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all">
+        Batal
+      </button>
+      <button id="appModalConfirmBtn" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-md">
+        Ya, Lanjutkan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+<!-- =====================================================
+ JAVASCRIPT APP LOGIC
+===================================================== -->
+<script>
+
+const DEFAULT_DATA = {
+  settings: {
+    school: "SMA NEGERI 1 NUSA BANGSA",
+    title: "PEMILIHAN KETUA OSIS TAHUN 2026/2027",
+    color: "#2563eb",
+    logo: "",
+    background: ""
+  },
+  candidates: [
+    {
+      id: 1,
+      number: 1,
+      name: "Ahmad Fauzan",
+      className: "XI IPA 1",
+      vision: "Mewujudkan OSIS yang responsif, inovatif, serta berlandaskan kekeluargaan dan kejujuran.",
+      mission: "1. Mengoptimalkan program ekstrakurikuler berbasis minat siswa.\n2. Mengadakan forum aspirasi rutin bulanan.",
+      photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=400",
+      votes: 0
+    },
+    {
+      id: 2,
+      number: 2,
+      name: "Siti Aisyah",
+      className: "XI IPA 2",
+      vision: "Membangun lingkungan sekolah yang kreatif, inklusif, dan berprestasi di tingkat nasional.",
+      mission: "1. Mengembangkan kompetisi seni dan teknologi antarkelas.\n2. Menjalin kerja sama sosial dengan komite sekolah.",
+      photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=400",
+      votes: 0
+    },
+    {
+      id: 3,
+      number: 3,
+      name: "Budi Santoso",
+      className: "XI IPS 1",
+      vision: "Menjadikan OSIS sebagai pelopor gerakan peduli lingkungan dan kewirausahaan siswa.",
+      mission: "1. Menggalakkan gerakan sekolah hijau dan daur ulang sampah.\n2. Mengadakan workshop bisnis kreatif bagi siswa.",
+      photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400",
+      votes: 0
+    }
+  ],
+  students: []
+};
+
+let data = loadData();
+let selectedCandidate = null;
+let modalConfirmCallback = null;
+
+
+function loadData() {
+  const saved = localStorage.getItem("osisDatabase");
+  if (!saved) return JSON.parse(JSON.stringify(DEFAULT_DATA));
+  try {
+    const parsed = JSON.parse(saved);
+    return {
+      ...DEFAULT_DATA,
+      ...parsed,
+      settings: { ...DEFAULT_DATA.settings, ...(parsed.settings || {}) },
+      candidates: Array.isArray(parsed.candidates) && parsed.candidates.length > 0 ? parsed.candidates : DEFAULT_DATA.candidates,
+      students: Array.isArray(parsed.students) ? parsed.students : []
+    };
+  } catch (e) {
+    return JSON.parse(JSON.stringify(DEFAULT_DATA));
+  }
+}
+
+function saveData() {
+  localStorage.setItem("osisDatabase", JSON.stringify(data));
+}
+
+/* Audio Synthesizer Feedback (Web Audio API) */
+function playSound(type) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'success') {
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+      osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15); // E5
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.3);
+    } else if (type === 'click') {
+      osc.frequency.setValueAtTime(400, ctx.currentTime);
+      gain.gain.setValueAtTime(0.05, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.08);
+    }
+  } catch(e) {}
+}
+
+/* Modal and Notification Dialog Helpers (Replacing standard alert & confirm) */
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  
+  const bgColors = {
+    info: 'bg-slate-900 text-white',
+    success: 'bg-emerald-600 text-white',
+    error: 'bg-rose-600 text-white'
+  };
+
+  toast.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2 animate-fade-in ${bgColors[type] || bgColors.info}`;
+  toast.innerHTML = `
+    <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-xmark' : 'fa-circle-info'}"></i>
+    <span>${esc(message)}</span>
+  `;
+
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.3s ease';
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+function showAppModal({ title, subtitle, body, iconClass, confirmText, confirmClass, onConfirm }) {
+  document.getElementById('appModalTitle').textContent = title || 'Konfirmasi';
+  document.getElementById('appModalSubtitle').textContent = subtitle || '';
+  document.getElementById('appModalBody').innerHTML = body || '';
+  
+  const iconEl = document.getElementById('appModalIcon');
+  iconEl.innerHTML = `<i class="${iconClass || 'fa-solid fa-circle-question'}"></i>`;
+  
+  const confirmBtn = document.getElementById('appModalConfirmBtn');
+  confirmBtn.textContent = confirmText || 'Ya, Lanjutkan';
+  confirmBtn.className = `px-5 py-2.5 rounded-xl font-bold text-xs transition-all shadow-md ${confirmClass || 'bg-blue-600 hover:bg-blue-700 text-white'}`;
+  
+  modalConfirmCallback = onConfirm;
+  
+  confirmBtn.onclick = function() {
+    if (typeof modalConfirmCallback === 'function') {
+      modalConfirmCallback();
+    }
+    closeAppModal();
+  };
+
+  const modal = document.getElementById('appModal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function closeAppModal() {
+  const modal = document.getElementById('appModal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+  modalConfirmCallback = null;
+}
+
+/* Helpers for string escape */
+function esc(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function photo(c) {
+  if (c && c.photo) return c.photo;
+  return `https://placehold.co/300x300/2563eb/ffffff?text=Calon+${c ? c.number : 'OSIS'}`;
+}
+
+function normalizeNIS(nis) {
+  return String(nis || '').trim().replace(/\s+/g, '');
+}
+
+function findStudent(nis) {
+  nis = normalizeNIS(nis);
+  return data.students.find(s => normalizeNIS(s.nis) === nis);
+}
+
+
+function startVoting() {
+  playSound('click');
+  const nisInput = document.getElementById("voterNIS").value;
+  const nis = normalizeNIS(nisInput);
+
+  if (!nis) {
+    showToast("Silakan masukkan Nomor Induk Siswa (NIS).", "error");
+    return;
+  }
+
+  const student = findStudent(nis);
+
+  if (!student) {
+    showToast("NIS tidak terdaftar dalam DPT. Hubungi panitia admin.", "error");
+    document.getElementById("voterNIS").value = "";
+    return;
+  }
+
+  if (student.voted) {
+    showToast(`Siswa ${student.name} (${student.nis}) sudah menyalurkan suara sebelumnya!`, "error");
+    document.getElementById("voterNIS").value = "";
+    return;
+  }
+
+  sessionStorage.setItem("currentNIS", nis);
+
+  document.getElementById("currentNIS").textContent = student.nis;
+  document.getElementById("currentVoterName").textContent = student.name;
+
+  document.getElementById("voterForm").classList.add("hidden");
+  document.getElementById("voteCandidateArea").classList.remove("hidden");
+  
+  showToast(`Selamat datang, ${student.name}. Silakan tentukan pilihan Anda.`, "success");
+}
+
+function selectCandidate(id) {
+  playSound('click');
+  const nis = sessionStorage.getItem("currentNIS");
+  const student = findStudent(nis);
+
+  if (!student || student.voted) {
+    showToast("Sesi pemilih tidak valid atau sudah memilih.", "error");
+    resetVoterScreen();
+    return;
+  }
+
+  selectedCandidate = data.candidates.find(c => c.id === id);
+  if (!selectedCandidate) return;
+
+  const modalBody = `
+    <div class="text-center space-y-3 py-2">
+      <img src="${photo(selectedCandidate)}" class="w-24 h-24 mx-auto rounded-full object-cover border-4 border-blue-600 shadow-md">
+      <div>
+        <span class="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-extrabold uppercase">
+          Nomor Urut 0${selectedCandidate.number}
+        </span>
+        <h4 class="text-xl font-black text-slate-900 mt-1">${esc(selectedCandidate.name)}</h4>
+        <p class="text-xs text-slate-500">${esc(selectedCandidate.className)}</p>
+      </div>
+
+      <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-left text-xs space-y-1">
+        <p><strong>Pemilih:</strong> ${esc(student.name)} (${esc(student.nis)})</p>
+        <p><strong>Kelas:</strong> ${esc(student.className)}</p>
+      </div>
+
+      <p class="text-xs font-semibold text-rose-600">
+        <i class="fa-solid fa-circle-exclamation"></i> Pilihan bersifat final dan tidak dapat diubah setelah dikonfirmasi.
+      </p>
+    </div>
+  `;
+
+  showAppModal({
+    title: "Konfirmasi Pilihan Suara",
+    subtitle: "Pastikan pilihan Anda sudah sesuai",
+    body: modalBody,
+    iconClass: "fa-solid fa-vote-yea text-blue-600",
+    confirmText: "YA, SAYA MEMILIH NOMOR " + selectedCandidate.number,
+    confirmClass: "bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/20",
+    onConfirm: confirmVote
+  });
+}
+
+
+function confirmVote() {
+  const nis = sessionStorage.getItem("currentNIS");
+  const student = findStudent(nis);
+
+  if (!student || student.voted) {
+    showToast("Sesi pemilih tidak valid atau sudah memilih.", "error");
+    resetVoterScreen();
+    return;
+  }
+
+  if (!selectedCandidate) return;
+
+  selectedCandidate.votes = Number(selectedCandidate.votes || 0) + 1;
+  student.voted = true;
+  student.votedAt = new Date().toLocaleString("id-ID");
+
+  saveData();
+  playSound('success');
+
+  showToast(`Suara Anda berhasil dicatat! Terima kasih, ${student.name}.`, "success");
+
+  resetVoterScreen();
+  renderResults();
+}
+
+function resetVoterScreen() {
+  sessionStorage.removeItem("currentNIS");
+  selectedCandidate = null;
+  document.getElementById("voterNIS").value = "";
+  document.getElementById("voterForm").classList.remove("hidden");
+  document.getElementById("voteCandidateArea").classList.add("hidden");
+}
+
+/* Candidate Display Generators */
+function renderCandidates() {
+  const homeContainer = document.getElementById("homeCandidates");
+  const voteContainer = document.getElementById("voteCandidates");
+
+  homeContainer.innerHTML = "";
+  voteContainer.innerHTML = "";
+
+  data.candidates.sort((a, b) => a.number - b.number).forEach(c => {
+    homeContainer.innerHTML += candidateCardHTML(c, false);
+    voteContainer.innerHTML += candidateCardHTML(c, true);
+  });
+}
+
+function candidateCardHTML(c, isVoting) {
+  return `
+    <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-md hover:shadow-xl transition-all relative flex flex-col justify-between space-y-5">
+      
+      <!-- Candidate Number Badge -->
+      <div class="absolute top-4 left-4 w-10 h-10 rounded-2xl bg-blue-600 text-white font-black text-lg flex items-center justify-center shadow-md">
+        ${c.number}
+      </div>
+
+      <div class="text-center space-y-3 pt-4">
+        <img src="${photo(c)}" alt="${esc(c.name)}" class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-blue-100 shadow-lg">
+        <div>
+          <h3 class="text-xl font-black text-slate-900">${esc(c.name)}</h3>
+          <span class="inline-block px-3 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-bold mt-1">
+            ${esc(c.className)}
+          </span>
+        </div>
+      </div>
+
+      <!-- Vision & Mission Collapsible / Info Box -->
+      <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-xs text-slate-700 flex-grow">
+        <div>
+          <strong class="text-blue-700 uppercase tracking-wider text-[10px] block mb-1">Visi</strong>
+          <p class="leading-relaxed font-medium">${esc(c.vision)}</p>
+        </div>
+        <div class="pt-2 border-t border-slate-200">
+          <strong class="text-blue-700 uppercase tracking-wider text-[10px] block mb-1">Misi</strong>
+          <p class="whitespace-pre-line leading-relaxed font-medium">${esc(c.mission)}</p>
+        </div>
+      </div>
+
+      ${isVoting ? `
+        <button onclick="selectCandidate(${c.id})" class="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs tracking-wide shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-vote-yea text-base"></i>
+          <span>PILIH CANDIDATE 0${c.number}</span>
+        </button>
+      ` : ''}
+
+    </div>
+  `;
+}
+
+/* Results Display Logic */
+function renderResults() {
+  const totalStudents = data.students.length;
+  const voted = data.students.filter(s => s.voted).length;
+  const notVoted = totalStudents - voted;
+  const totalVotes = data.candidates.reduce((acc, c) => acc + Number(c.votes || 0), 0);
+
+  document.getElementById("registeredStudents").textContent = totalStudents;
+  document.getElementById("totalVoters").textContent = voted;
+  document.getElementById("notVoted").textContent = notVoted;
+  document.getElementById("totalVotes").textContent = totalVotes;
+  document.getElementById("participation").textContent = totalStudents ? Math.round((voted / totalStudents) * 100) + "%" : "0%";
+
+  const resultList = document.getElementById("resultList");
+  resultList.innerHTML = "";
+
+  const sortedCandidates = [...data.candidates].sort((a, b) => (b.votes || 0) - (a.votes || 0));
+
+  sortedCandidates.forEach((c, idx) => {
+    const votes = Number(c.votes || 0);
+    const percent = totalVotes ? ((votes / totalVotes) * 100) : 0;
+    const isWinner = idx === 0 && votes > 0;
+
+    resultList.innerHTML += `
+      <div class="bg-white p-5 rounded-2xl border ${isWinner ? 'border-amber-300 ring-2 ring-amber-100 bg-amber-50/20' : 'border-slate-200/80'} shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        
+        <div class="flex items-center gap-4">
+          <img src="${photo(c)}" class="w-14 h-14 rounded-full object-cover border-2 border-slate-200">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-slate-900 text-base">0${c.number}. ${esc(c.name)}</span>
+              ${isWinner ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-extrabold"><i class="fa-solid fa-crown text-amber-500 mr-1"></i>Unggul</span>' : ''}
+            </div>
+            <p class="text-xs text-slate-500">${esc(c.className)} • <strong>${votes}</strong> Suara Sah</p>
+          </div>
+        </div>
+
+        <div class="w-full sm:w-1/2 space-y-1.5">
+          <div class="flex items-center justify-between text-xs font-bold">
+            <span class="text-slate-600">Perolehan Suara</span>
+            <span class="text-blue-600">${percent.toFixed(1)}%</span>
+          </div>
+          <div class="w-full h-3 rounded-full bg-slate-100 overflow-hidden">
+            <div class="h-full bg-blue-600 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+          </div>
+        </div>
+
+      </div>
+    `;
+  });
+
+  /* Chart Visualizer */
+  const chart = document.getElementById("chart");
+  chart.innerHTML = "";
+
+  data.candidates.sort((a, b) => a.number - b.number).forEach(c => {
+    const votes = Number(c.votes || 0);
+    const percent = totalVotes ? ((votes / totalVotes) * 100) : 0;
+
+    chart.innerHTML += `
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between text-xs font-bold text-slate-800">
+          <span>Nomor Urut 0${c.number} - ${esc(c.name)}</span>
+          <span>${votes} Suara (${percent.toFixed(1)}%)</span>
+        </div>
+        <div class="w-full h-4 rounded-full bg-slate-100 overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+
+function renderStudents() {
+  const tbody = document.getElementById("studentTable");
+  if (!tbody) return;
+
+  const search = (document.getElementById("studentSearch")?.value || "").toLowerCase().trim();
+
+  const filtered = data.students.filter(s =>
+    s.nis.toLowerCase().includes(search) ||
+    s.name.toLowerCase().includes(search) ||
+    s.className.toLowerCase().includes(search)
+  );
+
+  document.getElementById("studentCount").textContent = data.students.length;
+  tbody.innerHTML = "";
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="p-6 text-center text-slate-400">Tidak ada data siswa yang cocok.</td>
+      </tr>
+    `;
+    return;
+  }
+
+  filtered.forEach((s, i) => {
+    tbody.innerHTML += `
+      <tr class="hover:bg-slate-50 transition-colors">
+        <td class="p-3.5 text-slate-400">${i + 1}</td>
+        <td class="p-3.5 font-bold text-slate-900">${esc(s.nis)}</td>
+        <td class="p-3.5 font-semibold">${esc(s.name)}</td>
+        <td class="p-3.5 text-slate-500">${esc(s.className)}</td>
+        <td class="p-3.5">
+          ${s.voted ? 
+            `<span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold"><i class="fa-solid fa-check mr-1"></i>Sudah Memilih</span>` : 
+            `<span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 text-[11px] font-bold"><i class="fa-solid fa-clock mr-1"></i>Belum Memilih</span>`}
+        </td>
+        <td class="p-3.5 text-right space-x-1">
+          <button onclick="editStudent('${s.nis}')" class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 hover:bg-amber-100 font-bold text-[11px] transition-all">Edit</button>
+          <button onclick="deleteStudent('${s.nis}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 font-bold text-[11px] transition-all">Hapus</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+function addStudent() {
+  const nis = normalizeNIS(document.getElementById("studentNIS").value);
+  const name = document.getElementById("studentName").value.trim();
+  const kelas = document.getElementById("studentClass").value.trim();
+
+  if (!nis || !name || !kelas) {
+    showToast("NIS, Nama, dan Kelas wajib diisi.", "error");
+    return;
+  }
+
+  if (findStudent(nis)) {
+    showToast("NIS tersebut sudah terdaftar.", "error");
+    return;
+  }
+
+  data.students.push({
+    nis: nis,
+    name: name,
+    className: kelas,
+    voted: false,
+    votedAt: ""
+  });
+
+  saveData();
+  document.getElementById("studentNIS").value = "";
+  document.getElementById("studentName").value = "";
+  document.getElementById("studentClass").value = "";
+
+  renderStudents();
+  showToast(`Siswa ${name} berhasil ditambahkan!`, "success");
+}
+
+function editStudent(nis) {
+  const student = findStudent(nis);
+  if (!student) return;
+
+  const modalBody = `
+    <div class="space-y-3">
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Siswa</label>
+        <input id="editStudentName" value="${esc(student.name)}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">Kelas</label>
+        <input id="editStudentClass" value="${esc(student.className)}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm">
+      </div>
+    </div>
+  `;
+
+  showAppModal({
+    title: "Edit Data Siswa",
+    subtitle: `NIS: ${student.nis}`,
+    body: modalBody,
+    iconClass: "fa-solid fa-user-pen text-amber-600",
+    confirmText: "Simpan Perubahan",
+    confirmClass: "bg-amber-600 hover:bg-amber-700 text-white",
+    onConfirm: () => {
+      const newName = document.getElementById("editStudentName").value.trim();
+      const newClass = document.getElementById("editStudentClass").value.trim();
+
+      if (newName && newClass) {
+        student.name = newName;
+        student.className = newClass;
+        saveData();
+        renderStudents();
+        showToast("Data siswa diperbarui.", "success");
+      }
+    }
+  });
+}
+
+function deleteStudent(nis) {
+  const student = findStudent(nis);
+  if (!student) return;
+
+  showAppModal({
+    title: "Hapus Siswa",
+    subtitle: "Konfirmasi Penghapusan",
+    body: `Apakah Anda yakin ingin menghapus <strong>${esc(student.name)}</strong> (${student.nis}) dari database DPT?`,
+    iconClass: "fa-solid fa-user-minus text-rose-600",
+    confirmText: "Hapus Siswa",
+    confirmClass: "bg-rose-600 hover:bg-rose-700 text-white",
+    onConfirm: () => {
+      data.students = data.students.filter(s => normalizeNIS(s.nis) !== normalizeNIS(nis));
+      saveData();
+      renderStudents();
+      showToast("Siswa telah dihapus.", "info");
+    }
+  });
+}
+
+function generateSampleStudents() {
+  const sampleClasses = ["XI IPA 1", "XI IPA 2", "XI IPS 1", "XI IPS 2"];
+  const sampleNames = [
+    "Ahmad Rizky", "Dewi Lestari", "Eko Prasetyo", "Fitriani", "Gilang Ramadhan",
+    "Hani Permata", "Irfan Maulana", "Jasmine Putri", "Kiki Amalia", "Lukman Hakim",
+    "Nabila Syakieb", "Oki Setiana", "Putri Utami", "Rian Hidayat", "Siti Rahma"
+  ];
+
+  let added = 0;
+  sampleNames.forEach((name, index) => {
+    const nis = String(10001 + index);
+    if (!findStudent(nis)) {
+      data.students.push({
+        nis: nis,
+        name: name,
+        className: sampleClasses[index % sampleClasses.length],
+        voted: false,
+        votedAt: ""
+      });
+      added++;
+    }
+  });
+
+  saveData();
+  renderStudents();
+  showToast(`Berhasil menambahkan ${added} data siswa contoh.`, "success");
+}
+
+
+function importStudentsCSV(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const lines = e.target.result.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+    let added = 0;
+    let skipped = 0;
+
+    lines.forEach((line, index) => {
+      if (index === 0 && line.toLowerCase().includes("nis")) return;
+      const parts = line.split(",");
+      if (parts.length < 3) {
+        skipped++;
+        return;
+      }
+
+      const nis = normalizeNIS(parts[0]);
+      const name = parts[1].trim();
+      const kelas = parts.slice(2).join(",").trim();
+
+      if (!nis || !name || !kelas || findStudent(nis)) {
+        skipped++;
+        return;
+      }
+
+      data.students.push({
+        nis: nis,
+        name: name,
+        className: kelas,
+        voted: false,
+        votedAt: ""
+      });
+      added++;
+    });
+
+    saveData();
+    renderStudents();
+    showToast(`Import Selesai! Berhasil: ${added}, Dilewati: ${skipped}`, "success");
+    event.target.value = '';
+  };
+
+  reader.readAsText(file);
+}
+
+function downloadCSVTemplate() {
+  const csv = "NIS,Nama,Kelas\n10001,Ahmad Fauzan,XI IPA 1\n10002,Siti Aisyah,XI IPA 2\n10003,Budi Santoso,XI IPS 1\n";
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "template_dpt_siswa.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* Admin Candidates Management Render */
+function renderAdmin() {
+  document.getElementById("schoolInput").value = data.settings.school;
+  document.getElementById("titleInput").value = data.settings.title;
+  document.getElementById("colorInput").value = data.settings.color || "#2563eb";
+
+  if (data.settings.logo) {
+    document.getElementById("logoPreview").src = data.settings.logo;
+  }
+
+  renderStudents();
+
+  const box = document.getElementById("candidateAdmin");
+  box.innerHTML = "";
+
+  data.candidates.sort((a, b) => a.number - b.number).forEach(c => {
+    box.innerHTML += `
+      <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h4 class="font-bold text-slate-900 text-sm">Nomor Urut 0${c.number}</h4>
+          <button onclick="deleteCandidate(${c.id})" class="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-700 hover:bg-rose-200 text-xs font-bold transition-all">Hapus Calon</button>
+        </div>
+
+        <div class="space-y-3">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Nama Calon</label>
+              <input id="cname${c.id}" value="${esc(c.name)}" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Kelas</label>
+              <input id="cclass${c.id}" value="${esc(c.className)}" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Visi</label>
+            <textarea id="cvision${c.id}" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none h-16">${esc(c.vision)}</textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Misi</label>
+            <textarea id="cmission${c.id}" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none h-20">${esc(c.mission)}</textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Foto Calon</label>
+            <input type="file" accept="image/*" onchange="candidatePhoto(event, ${c.id})" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-slate-200">
+            <img id="cphoto${c.id}" class="mt-2 w-16 h-16 rounded-full object-cover border" src="${photo(c)}">
+          </div>
+
+          <button onclick="saveCandidate(${c.id})" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-floppy-disk"></i>
+            <span>Simpan Calon 0${c.number}</span>
+          </button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function saveCandidate(id) {
+  const c = data.candidates.find(x => x.id === id);
+  if (!c) return;
+
+  c.name = document.getElementById("cname" + id).value.trim();
+  c.className = document.getElementById("cclass" + id).value.trim();
+  c.vision = document.getElementById("cvision" + id).value.trim();
+  c.mission = document.getElementById("cmission" + id).value.trim();
+
+  saveData();
+  renderCandidates();
+  showToast(`Data calon nomor 0${c.number} disimpan.`, "success");
+}
+
+function candidatePhoto(event, id) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const c = data.candidates.find(x => x.id === id);
+    if (c) {
+      c.photo = e.target.result;
+      saveData();
+      document.getElementById("cphoto" + id).src = c.photo;
+      renderCandidates();
+      showToast("Foto calon berhasil diunggah.", "success");
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function addNewCandidate() {
+  const nextNum = data.candidates.length + 1;
+  const newCandidate = {
+    id: Date.now(),
+    number: nextNum,
+    name: "Nama Calon " + nextNum,
+    className: "XI IPA 1",
+    vision: "Visi calon ketua OSIS...",
+    mission: "1. Misi pertama\n2. Misi kedua",
+    photo: "",
+    votes: 0
+  };
+
+  data.candidates.push(newCandidate);
+  saveData();
+  renderCandidates();
+  renderAdmin();
+  showToast("Calon baru berhasil ditambahkan.", "success");
+}
+
+function deleteCandidate(id) {
+  showAppModal({
+    title: "Hapus Calon",
+    subtitle: "Konfirmasi Hapus Candidate",
+    body: "Apakah Anda yakin ingin menghapus kandidat ini dari lembar surat suara?",
+    iconClass: "fa-solid fa-trash text-rose-600",
+    confirmText: "Hapus Calon",
+    confirmClass: "bg-rose-600 hover:bg-rose-700 text-white",
+    onConfirm: () => {
+      data.candidates = data.candidates.filter(c => c.id !== id);
+      // Re-index candidate numbers
+      data.candidates.forEach((c, idx) => c.number = idx + 1);
+      saveData();
+      renderCandidates();
+      renderAdmin();
+      showToast("Calon telah dihapus.", "info");
+    }
+  });
+}
+
+/* Settings, Backup, and Reset Handlers */
+function saveSettings() {
+  data.settings.school = document.getElementById("schoolInput").value.trim();
+  data.settings.title = document.getElementById("titleInput").value.trim();
+  data.settings.color = document.getElementById("colorInput").value;
+
+  saveData();
+  applySettings();
+  showToast("Pengaturan tampilan berhasil diperbarui.", "success");
+}
+
+document.getElementById("logoInput").addEventListener("change", function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = x => {
+    data.settings.logo = x.target.result;
+    document.getElementById("logoPreview").src = x.target.result;
+    saveData();
+    applySettings();
+    showToast("Logo sekolah diperbarui.", "success");
+  };
+  reader.readAsDataURL(file);
+});
+
+function exportBackup() {
+  const jsonStr = JSON.stringify(data, null, 2);
+  const blob = new Blob([jsonStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `backup_osis_${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast("File backup JSON berhasil diunduh.", "success");
+}
+
+function importBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (imported && imported.settings && Array.isArray(imported.candidates)) {
+        data = imported;
+        saveData();
+        applySettings();
+        renderCandidates();
+        renderAdmin();
+        renderResults();
+        showToast("Database berhasil dipulihkan!", "success");
+      } else {
+        showToast("Format JSON backup tidak valid.", "error");
+      }
+    } catch (err) {
+      showToast("Gagal membaca berkas JSON.", "error");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetElection() {
+  showAppModal({
+    title: "RESET HASIL PEMILIHAN",
+    subtitle: "Tindakan Berbahaya",
+    body: "Seluruh perolehan suara akan di-nol-kan dan status semua siswa akan diubah kembali menjadi <strong>Belum Memilih</strong>. Apakah Anda benar-benar yakin?",
+    iconClass: "fa-solid fa-triangle-exclamation text-rose-600",
+    confirmText: "YA, RESET SEMUA SUARA",
+    confirmClass: "bg-rose-600 hover:bg-rose-700 text-white font-black",
+    onConfirm: () => {
+      data.candidates.forEach(c => c.votes = 0);
+      data.students.forEach(s => {
+        s.voted = false;
+        s.votedAt = "";
+      });
+
+      saveData();
+      renderCandidates();
+      renderStudents();
+      renderResults();
+      showToast("Seluruh hasil voting telah di-reset.", "info");
+    }
+  });
+}
+
+/* Authentication Handlers */
+function loginAdmin() {
+  const user = document.getElementById("adminUser").value;
+  const pass = document.getElementById("adminPass").value;
+
+  if (user === "admin" && pass === "osis123") {
+    sessionStorage.setItem("osisAdmin", "true");
+    checkAdmin();
+    showToast("Selamat datang, Admin!", "success");
+  } else {
+    showToast("Username atau password salah.", "error");
+  }
+}
+
+function checkAdmin() {
+  const logged = sessionStorage.getItem("osisAdmin") === "true";
+  document.getElementById("loginBox").classList.toggle("hidden", logged);
+  document.getElementById("adminPanel").classList.toggle("hidden", !logged);
+
+  if (logged) renderAdmin();
+}
+
+function logoutAdmin() {
+  sessionStorage.removeItem("osisAdmin");
+  checkAdmin();
+  showToast("Anda telah keluar dari panel admin.", "info");
+}
+
+
+function showPage(pageId) {
+  playSound('click');
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active", "block"));
+  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+
+  const target = document.getElementById(pageId);
+  if (target) {
+    target.classList.remove("hidden");
+    target.classList.add("active", "block");
+  }
+
+  /* Highlight active nav link */
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    btn.classList.remove("bg-blue-50", "text-blue-600", "font-bold");
+  });
+
+  const activeBtn = document.getElementById(`nav-${pageId}`);
+  if (activeBtn && pageId !== 'adminPage') {
+    activeBtn.classList.add("bg-blue-50", "text-blue-600", "font-bold");
+  }
+
+  if (pageId === "resultsPage") renderResults();
+  if (pageId === "adminPage") checkAdmin();
+  if (pageId === "votePage") resetVoterScreen();
+}
+
+function applySettings() {
+  const school = data.settings.school || "NAMA SEKOLAH";
+  const title = data.settings.title || "PEMILIHAN KETUA OSIS";
+
+  document.getElementById("schoolTop").textContent = school;
+  document.getElementById("titleTop").textContent = title;
+  document.getElementById("heroTitle").textContent = title;
+  document.getElementById("heroSchool").textContent = school;
+  document.getElementById("resultSchool").textContent = school;
+
+  if (data.settings.logo) {
+    document.getElementById("topLogo").src = data.settings.logo;
+    document.getElementById("heroLogo").src = data.settings.logo;
+  }
+
+  if (data.settings.color) {
+    document.documentElement.style.setProperty('--primary-color', data.settings.color);
+  }
+}
+
+/* Window Startup Initialization */
+window.onload = function() {
+  applySettings();
+  renderCandidates();
+  showPage('homePage');
+};
+</script>
+
+</body>
+</html>

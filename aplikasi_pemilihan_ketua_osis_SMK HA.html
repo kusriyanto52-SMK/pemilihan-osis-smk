@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pemilihan Ketua OSIS</title>
+
+<style>
+:root{
+    --primary:#2563eb;
+    --secondary:#1e40af;
+    --accent:#f59e0b;
+    --bg:#eef4ff;
+    --text:#172033;
+    --card:#ffffff;
+    --muted:#64748b;
+    --danger:#dc2626;
+    --success:#16a34a;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    color:var(--text);
+    background:
+        linear-gradient(rgba(238,244,255,var(--bg-opacity, .90)),rgba(238,244,255,var(--bg-opacity, .90))),
+        var(--background-image, none);
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+}
+
+button,
+input,
+textarea,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.topbar{
+    background:var(--primary);
+    color:white;
+    min-height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 25px;
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.logo{
+    width:52px;
+    height:52px;
+    object-fit:contain;
+    background:white;
+    border-radius:12px;
+    padding:4px;
+}
+
+.brand h1{
+    margin:0;
+    font-size:20px;
+}
+
+.brand small{
+    opacity:.85;
+}
+
+.nav{
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+}
+
+.nav button{
+    background:rgba(255,255,255,.13);
+    border:1px solid rgba(255,255,255,.25);
+    color:white;
+    padding:9px 12px;
+    border-radius:8px;
+    transition: background 0.2s;
+}
+
+.nav button:hover{
+    background:rgba(255,255,255,.25);
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:25px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.hero{
+    text-align:center;
+    padding:25px 10px;
+}
+
+.hero-logo{
+    width:100px;
+    height:100px;
+    object-fit:contain;
+    border-radius:20px;
+    background:white;
+    padding:7px;
+    box-shadow:0 8px 30px rgba(0,0,0,.12);
+}
+
+.hero h2{
+    font-size:32px;
+    margin:15px 0 7px;
+}
+
+.hero p{
+    color:var(--muted);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+    gap:22px;
+}
+
+.card{
+    background:var(--card);
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 8px 30px rgba(15,23,42,.09);
+    border:1px solid rgba(148,163,184,.15);
+}
+
+.candidate{
+    text-align:center;
+    transition:.2s;
+    position:relative;
+}
+
+.candidate:hover{
+    transform:translateY(-4px);
+    box-shadow:0 15px 35px rgba(15,23,42,.14);
+}
+
+.candidate-photo{
+    width:160px;
+    height:160px;
+    object-fit:cover;
+    border-radius:50%;
+    border:5px solid var(--primary);
+    background:#e5e7eb;
+}
+
+.number{
+    position:absolute;
+    top:15px;
+    left:15px;
+    background:var(--primary);
+    color:white;
+    width:43px;
+    height:43px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.candidate h3{
+    margin:14px 0 4px;
+}
+
+.class-name{
+    color:var(--muted);
+    font-size:14px;
+}
+
+.vm{
+    text-align:left;
+    background:#f8fafc;
+    border-radius:10px;
+    padding:12px;
+    margin:15px 0;
+    font-size:14px;
+}
+
+.btn{
+    border:0;
+    padding:11px 16px;
+    border-radius:9px;
+    font-weight:bold;
+    transition:.2s;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+    opacity:0.95;
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:white;
+}
+
+.btn-secondary{
+    background:#e2e8f0;
+    color:#1e293b;
+}
+
+.btn-danger{
+    background:var(--danger);
+    color:white;
+}
+
+.btn-success{
+    background:var(--success);
+    color:white;
+}
+
+.btn-warning{
+    background:var(--accent);
+    color:white;
+}
+
+.full{
+    width:100%;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stat{
+    background:var(--card);
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.07);
+}
+
+.stat strong{
+    display:block;
+    font-size:30px;
+    color:var(--primary);
+    margin-top:5px;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:12px;
+    border-bottom:1px solid #e2e8f0;
+    text-align:left;
+}
+
+th{
+    background:#f8fafc;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:11px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    margin-top:6px;
+    margin-bottom:14px;
+    background:white;
+}
+
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+label{
+    font-weight:bold;
+    font-size:14px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.preview{
+    width:100px;
+    height:100px;
+    object-fit:cover;
+    border-radius:12px;
+    border:2px solid #ddd;
+    display:block;
+    margin:8px 0;
+}
+
+.result-card{
+    display:grid;
+    grid-template-columns:110px 1fr 160px;
+    align-items:center;
+    gap:18px;
+    margin-bottom:15px;
+}
+
+.result-photo{
+    width:85px;
+    height:85px;
+    object-fit:cover;
+    border-radius:50%;
+}
+
+.bar{
+    height:20px;
+    background:#e2e8f0;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:8px;
+}
+
+.bar-fill{
+    height:100%;
+    background:var(--primary);
+    width:0%;
+    transition:width .5s;
+}
+
+.percent{
+    font-size:25px;
+    font-weight:bold;
+    color:var(--primary);
+    text-align:right;
+}
+
+.login-box{
+    max-width:420px;
+    margin:80px auto;
+}
+
+.footer{
+    text-align:center;
+    padding:30px;
+    color:var(--muted);
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+    z-index:999;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-content{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    max-width:500px;
+    width:100%;
+    max-height:90vh;
+    overflow:auto;
+}
+
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:15px;
+}
+
+.chart{
+    margin-top:25px;
+}
+
+.chart-row{
+    margin-bottom:15px;
+}
+
+.chart-label{
+    display:flex;
+    justify-content:space-between;
+    font-weight:bold;
+    margin-bottom:4px;
+}
+
+.chart-track{
+    height:28px;
+    background:#e2e8f0;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.chart-value{
+    height:100%;
+    background:var(--primary);
+    display:flex;
+    align-items:center;
+    padding-left:10px;
+    color:white;
+    font-size:12px;
+    transition:width .6s;
+}
+
+.notice{
+    padding:14px;
+    border-radius:10px;
+    background:#eff6ff;
+    border-left:5px solid var(--primary);
+    margin-bottom:18px;
+}
+
+.hidden{
+    display:none!important;
+}
+
+.actions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+@media(max-width:850px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .result-card{
+        grid-template-columns:80px 1fr;
+    }
+
+    .percent{
+        text-align:left;
+        grid-column:2;
+    }
+
+    .topbar{
+        flex-direction:column;
+        gap:10px;
+        align-items:flex-start;
+    }
+}
+
+@media(max-width:500px){
+    .container{
+        padding:12px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .hero h2{
+        font-size:25px;
+    }
+
+    .nav{
+        width:100%;
+    }
+
+    .nav button{
+        flex:1;
+    }
+}
+
+@media print{
+    .topbar,
+    .nav,
+    .no-print,
+    .footer{
+        display:none!important;
+    }
+
+    body{
+        background:white!important;
+    }
+
+    .page{
+        display:none!important;
+    }
+
+    #resultsPage{
+        display:block!important;
+    }
+
+    .card{
+        box-shadow:none;
+        border:1px solid #ddd;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <img id="topLogo" class="logo" src="" alt="Logo">
+        <div>
+            <h1 id="schoolNameTop">SMA / SMK / SMP</h1>
+            <small id="electionTitleTop">Pemilihan Ketua OSIS</small>
+        </div>
+    </div>
+
+    <div class="nav">
+        <button onclick="showPage('homePage')">🏠 Beranda</button>
+        <button onclick="showPage('votePage')">🗳️ Voting</button>
+        <button onclick="showPage('resultsPage')">📊 Hasil</button>
+        <button onclick="showAdmin()">⚙️ Admin</button>
+    </div>
+</header>
+
+<main class="container">
+
+<!-- HOME -->
+<section id="homePage" class="page active">
+
+    <div class="hero">
+        <img id="heroLogo" class="hero-logo" src="" alt="Logo Sekolah">
+        <h2 id="heroTitle">PEMILIHAN KETUA OSIS</h2>
+        <p id="heroSchool">Nama Sekolah</p>
+        <button class="btn btn-primary" onclick="showPage('votePage')">
+            MULAI PEMUNGUTAN SUARA
+        </button>
+    </div>
+
+    <div class="notice">
+        <strong>Petunjuk:</strong>
+        Pilih salah satu calon Ketua OSIS kemudian tekan tombol
+        <b>Vote / Pilih</b>. Pastikan pilihan Anda sudah benar sebelum mengonfirmasi.
+    </div>
+
+    <div id="homeCandidates" class="grid"></div>
+</section>
+
+<!-- VOTE -->
+<section id="votePage" class="page">
+
+    <div class="hero">
+        <h2>Pilih Calon Ketua OSIS</h2>
+        <p id="voteInstruction">
+            Silakan pilih salah satu calon di bawah ini.
+        </p>
+    </div>
+
+    <div id="voteCandidates" class="grid"></div>
+</section>
+
+<!-- RESULTS -->
+<section id="resultsPage" class="page">
+
+    <div class="hero">
+        <h2>📊 Hasil Penghitungan Suara</h2>
+        <p id="resultSchool"></p>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            Total Suara
+            <strong id="totalVotes">0</strong>
+        </div>
+
+        <div class="stat">
+            Suara Sah
+            <strong id="validVotes">0</strong>
+        </div>
+
+        <div class="stat">
+            Suara Terbanyak
+            <strong id="highestVotes">0</strong>
+        </div>
+
+        <div class="stat">
+            Status
+            <strong id="resultStatus">Aktif</strong>
+        </div>
+    </div>
+
+    <div id="resultList"></div>
+
+    <div class="card chart">
+        <h3>Grafik Perolehan Suara</h3>
+        <div id="chartContainer"></div>
+    </div>
+
+    <div class="card no-print" style="margin-top:20px;">
+        <button class="btn btn-primary" onclick="window.print()">
+            🖨️ Cetak Hasil Pemilihan
+        </button>
+    </div>
+
+</section>
+
+<!-- ADMIN -->
+<section id="adminPage" class="page">
+
+    <div id="loginSection" class="login-box card">
+
+        <h2>🔐 Login Administrator</h2>
+
+        <p>Masukkan akun administrator.</p>
+
+        <label for="adminUser">Username</label>
+        <input id="adminUser" value="admin">
+
+        <label for="adminPass">Password</label>
+        <input id="adminPass" type="password">
+
+        <button class="btn btn-primary full" onclick="adminLogin()">
+            LOGIN
+        </button>
+
+        <p style="font-size:12px;color:#64748b;margin-top:15px;">
+            Default login: admin / osis123
+        </p>
+    </div>
+
+    <div id="adminPanel" class="hidden">
+
+        <div class="hero">
+            <h2>⚙️ Panel Administrator</h2>
+            <p>Kelola data calon, tampilan, dan hasil pemilihan.</p>
+        </div>
+
+        <div class="card">
+            <div class="actions-header">
+                <h3 style="margin:0;">👥 Data Calon Ketua OSIS</h3>
+                <button class="btn btn-primary" onclick="addCandidate()">
+                    ➕ Tambah Calon Baru
+                </button>
+            </div>
+
+            <div id="candidateForms"></div>
+
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+            <h3>🎨 Pengaturan Tampilan</h3>
+
+            <div class="form-grid">
+
+                <div>
+                    <label for="settingSchool">Nama Sekolah</label>
+                    <input id="settingSchool">
+
+                    <label for="settingTitle">Judul Pemilihan</label>
+                    <input id="settingTitle">
+
+                    <label for="settingColor">Warna Tema</label>
+                    <input id="settingColor" type="color">
+
+                    <label for="logoInput">Upload Logo</label>
+                    <input id="logoInput" type="file" accept="image/*">
+
+                    <img id="logoPreview" class="preview" alt="Preview Logo">
+                </div>
+
+                <div>
+                    <label for="bgInput">Upload Background</label>
+                    <input id="bgInput" type="file" accept="image/*">
+
+                    <img id="bgPreview" class="preview" alt="Preview BG">
+
+                    <label for="bgOpacity">Transparansi Background</label>
+                    <input id="bgOpacity" type="range" min="0.3" max="1" step="0.05">
+
+                    <p style="font-size:12px;color:#64748b;">
+                        Gunakan gambar dengan ukuran cukup besar agar tampilan
+                        background tetap jernih.
+                    </p>
+                </div>
+
+            </div>
+
+            <button class="btn btn-success" onclick="saveSettings()">
+                💾 Simpan Pengaturan Tampilan
+            </button>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+            <h3>🗳️ Pengelolaan Suara & Perangkat</h3>
+
+            <p style="font-size:14px;color:#64748b;">
+                Kelola status pemungutan suara atau izinkan pemungutan ulang pada perangkat ini.
+            </p>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-warning" onclick="resetVoterDevice()">
+                    🔓 Buka Kunci Voting Perangkat Ini
+                </button>
+                <button class="btn btn-danger" onclick="resetVotes()">
+                    🗑️ Reset Semua Hasil Suara
+                </button>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+            <h3>💾 Backup & Restore</h3>
+
+            <p style="font-size:14px;color:#64748b;">
+                Gunakan fitur ekspor/impor untuk mengamankan data atau memindahkan konfigurasi.
+            </p>
+
+            <button class="btn btn-primary" onclick="exportData()">
+                ⬇️ Export Data (JSON)
+            </button>
+
+            <label style="display:inline-block;margin-left:8px;">
+                <span class="btn btn-secondary">
+                    ⬆️ Import Data (JSON)
+                    <input
+                        id="importFile"
+                        type="file"
+                        accept=".json"
+                        style="display:none"
+                        onchange="importData(event)">
+                </span>
+            </label>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+            <button class="btn btn-secondary" onclick="adminLogout()">
+                🚪 Keluar Admin
+            </button>
+        </div>
+
+    </div>
+</section>
+
+</main>
+
+<footer class="footer">
+    Sistem Pemilihan Ketua OSIS Digital &copy; 2026
+</footer>
+
+<!-- MODAL CONFIRM -->
+<div id="voteModal" class="modal">
+
+    <div class="modal-content">
+
+        <h2>Konfirmasi Pilihan</h2>
+
+        <div id="modalCandidate"></div>
+
+        <p style="margin-top:15px; color:#475569;">
+            Apakah Anda yakin ingin memilih calon ini?
+            Setelah dikonfirmasi, suara Anda tidak dapat diubah.
+        </p>
+
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeModal()">
+                Batal
+            </button>
+
+            <button class="btn btn-success" onclick="confirmVote()">
+                Ya, Saya Memilih
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+/* ============================================================
+   DATA DEFAULT
+============================================================ */
+
+const DEFAULT_DATA = {
+
+    settings:{
+        school:"SMA / SMK / SMP NEGERI 1",
+        title:"PEMILIHAN KETUA OSIS TAHUN 2026/2027",
+        color:"#2563eb",
+        logo:"",
+        background:"",
+        bgOpacity:"0.90"
+    },
+
+    candidates:[
+        {
+            id:1,
+            number:1,
+            name:"Ahmad Fauzan",
+            className:"XI IPA 1",
+            vision:"Mewujudkan OSIS yang aktif, kreatif, disiplin, dan berprestasi.",
+            mission:"Meningkatkan kegiatan siswa, mengembangkan kreativitas, dan memperkuat kebersamaan.",
+            photo:"",
+            votes:0
+        },
+        {
+            id:2,
+            number:2,
+            name:"Siti Aisyah",
+            className:"XI IPA 2",
+            vision:"Membangun sekolah yang aktif, inovatif, ramah, dan berkarakter.",
+            mission:"Mengembangkan kegiatan positif, meningkatkan prestasi, dan menciptakan lingkungan sekolah yang nyaman.",
+            photo:"",
+            votes:0
+        },
+        {
+            id:3,
+            number:3,
+            name:"Budi Santoso",
+            className:"XI IPS 1",
+            vision:"Menjadikan OSIS sebagai wadah pengembangan potensi seluruh siswa.",
+            mission:"Mendorong kegiatan olahraga, seni, akademik, dan kepemimpinan siswa.",
+            photo:"",
+            votes:0
+        }
+    ]
+};
+
+let data = loadData();
+let selectedCandidate = null;
+
+/* ============================================================
+   UTILITIES
+============================================================ */
+
+function escapeHTML(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function escapeAttribute(str) {
+    return escapeHTML(str);
+}
+
+/* ============================================================
+   STORAGE
+============================================================ */
+
+function loadData(){
+    const saved = localStorage.getItem("osisElectionData");
+
+    if(!saved){
+        return JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+
+    try{
+        const parsed = JSON.parse(saved);
+
+        return {
+            ...DEFAULT_DATA,
+            ...parsed,
+            settings:{
+                ...DEFAULT_DATA.settings,
+                ...(parsed.settings || {})
+            },
+            candidates: parsed.candidates || DEFAULT_DATA.candidates
+        };
+
+    }catch(e){
+        return JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+}
+
+function saveData(){
+    localStorage.setItem(
+        "osisElectionData",
+        JSON.stringify(data)
+    );
+}
+
+/* ============================================================
+   PAGE NAVIGATION
+============================================================ */
+
+function showPage(pageId){
+    document.querySelectorAll(".page").forEach(page=>{
+        page.classList.remove("active");
+    });
+
+    document.getElementById(pageId).classList.add("active");
+
+    if(pageId === "resultsPage"){
+        renderResults();
+    }
+
+    if(pageId === "adminPage"){
+        checkAdmin();
+    }
+}
+
+/* ============================================================
+   DISPLAY SETTINGS
+============================================================ */
+
+function applySettings(){
+    document.documentElement.style.setProperty(
+        "--primary",
+        data.settings.color
+    );
+
+    document.getElementById("schoolNameTop").textContent =
+        data.settings.school;
+
+    document.getElementById("electionTitleTop").textContent =
+        data.settings.title;
+
+    document.getElementById("heroSchool").textContent =
+        data.settings.school;
+
+    document.getElementById("heroTitle").textContent =
+        data.settings.title;
+
+    document.getElementById("resultSchool").textContent =
+        data.settings.school + " — " + data.settings.title;
+
+    const defaultLogoSVG = "data:image/svg+xml;charset=UTF-8," +
+        encodeURIComponent(
+            `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+            <rect width="200" height="200" rx="30" fill="#2563eb"/>
+            <text x="100" y="115" text-anchor="middle" font-weight="bold"
+            font-size="45" fill="#ffffff" font-family="sans-serif">OSIS</text>
+            </svg>`
+        );
+
+    const logos = [
+        document.getElementById("topLogo"),
+        document.getElementById("heroLogo")
+    ];
+
+    logos.forEach(img=>{
+        if(data.settings.logo){
+            img.src = data.settings.logo;
+        }else{
+            img.src = defaultLogoSVG;
+        }
+    });
+
+    if(data.settings.background){
+        document.documentElement.style.setProperty(
+            "--background-image",
+            `url("${data.settings.background}")`
+        );
+    }else{
+        document.documentElement.style.setProperty(
+            "--background-image",
+            "none"
+        );
+    }
+
+    document.documentElement.style.setProperty(
+        "--bg-opacity",
+        data.settings.bgOpacity || "0.90"
+    );
+}
+
+/* ============================================================
+   CANDIDATES RENDERING
+============================================================ */
+
+function getPhoto(candidate){
+    if(candidate.photo){
+        return candidate.photo;
+    }
+
+    return "data:image/svg+xml;charset=UTF-8," +
+    encodeURIComponent(
+        `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
+        <rect width="300" height="300" fill="#e2e8f0"/>
+        <circle cx="150" cy="115" r="55" fill="#94a3b8"/>
+        <path d="M60 285 C70 205 230 205 240 285" fill="#94a3b8"/>
+        </svg>`
+    );
+}
+
+function renderCandidates(){
+    const home = document.getElementById("homeCandidates");
+    const vote = document.getElementById("voteCandidates");
+
+    home.innerHTML = "";
+    vote.innerHTML = "";
+
+    if (data.candidates.length === 0) {
+        const emptyMsg = `<div class="card" style="grid-column: 1/-1; text-align: center;">Belum ada data calon ketua OSIS.</div>`;
+        home.innerHTML = emptyMsg;
+        vote.innerHTML = emptyMsg;
+        return;
+    }
+
+    data.candidates.forEach(c=>{
+        home.innerHTML += candidateHTML(c, false);
+        vote.innerHTML += candidateHTML(c, true);
+    });
+
+    if(hasVoted()){
+        document.getElementById("voteInstruction").innerHTML =
+            "<b style='color:var(--danger)'>Voting telah dilakukan pada perangkat ini.</b>";
+    } else {
+        document.getElementById("voteInstruction").innerHTML =
+            "Silakan pilih salah satu calon di bawah ini.";
+    }
+}
+
+function candidateHTML(c, voting){
+    const voterDone = hasVoted();
+    return `
+    <div class="card candidate">
+
+        <div class="number">${c.number}</div>
+
+        <img
+            class="candidate-photo"
+            src="${getPhoto(c)}"
+            alt="${escapeHTML(c.name)}">
+
+        <h3>${escapeHTML(c.name)}</h3>
+
+        <div class="class-name">
+            ${escapeHTML(c.className)}
+        </div>
+
+        <div class="vm">
+            <b>Visi</b>
+            <p>${escapeHTML(c.vision)}</p>
+
+            <b>Misi</b>
+            <p>${escapeHTML(c.mission)}</p>
+        </div>
+
+        ${
+            voting
+            ?
+            `<button
+                class="btn btn-primary full"
+                ${voterDone ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}
+                onclick="selectCandidate(${c.id})">
+                🗳️ ${voterDone ? 'SUDAH MEMILIH' : 'PILIK CALON NO. ' + c.number}
+            </button>`
+            :
+            ""
+        }
+
+    </div>
+    `;
+}
+
+/* ============================================================
+   VOTING LOGIC
+============================================================ */
+
+function hasVoted(){
+    return localStorage.getItem("osisHasVoted") === "true";
+}
+
+function selectCandidate(id){
+    if(hasVoted()){
+        alert("Perangkat ini sudah digunakan untuk melakukan voting.");
+        return;
+    }
+
+    selectedCandidate = data.candidates.find(c=>c.id === id);
+
+    if(!selectedCandidate){
+        return;
+    }
+
+    document.getElementById("modalCandidate").innerHTML = `
+        <div style="text-align:center">
+            <img
+                src="${getPhoto(selectedCandidate)}"
+                style="
+                    width:120px;
+                    height:120px;
+                    object-fit:cover;
+                    border-radius:50%;
+                    border:4px solid var(--primary);
+                ">
+
+            <h3 style="margin:10px 0 5px;">
+                Nomor Urut ${selectedCandidate.number}
+            </h3>
+
+            <h2 style="margin:0;">
+                ${escapeHTML(selectedCandidate.name)}
+            </h2>
+
+            <p style="color:var(--muted);margin-top:5px;">
+                ${escapeHTML(selectedCandidate.className)}
+            </p>
+        </div>
+    `;
+
+    document.getElementById("voteModal").classList.add("show");
+}
+
+function closeModal(){
+    selectedCandidate = null;
+    document.getElementById("voteModal").classList.remove("show");
+}
+
+function confirmVote(){
+    if(!selectedCandidate){
+        return;
+    }
+
+    if(hasVoted()){
+        alert("Voting sudah dilakukan pada perangkat ini.");
+        closeModal();
+        return;
+    }
+
+    selectedCandidate.votes = (Number(selectedCandidate.votes) || 0) + 1;
+
+    saveData();
+    localStorage.setItem("osisHasVoted", "true");
+
+    closeModal();
+
+    alert("Terima kasih! Suara Anda telah berhasil disimpan.");
+
+    renderCandidates();
+    showPage("resultsPage");
+}
+
+/* ============================================================
+   RESULTS
+============================================================ */
+
+function renderResults(){
+    const total = data.candidates.reduce((sum,c)=>sum + Number(c.votes || 0), 0);
+    const max = Math.max(0, ...data.candidates.map(c=>Number(c.votes || 0)));
+
+    document.getElementById("totalVotes").textContent = total;
+    document.getElementById("validVotes").textContent = total;
+    document.getElementById("highestVotes").textContent = max;
+
+    const resultList = document.getElementById("resultList");
+    resultList.innerHTML = "";
+
+    if (data.candidates.length === 0) {
+        resultList.innerHTML = `<div class="card" style="text-align:center;">Belum ada calon.</div>`;
+        return;
+    }
+
+    data.candidates.forEach(c=>{
+        const votes = Number(c.votes || 0);
+        const percent = total > 0 ? ((votes / total) * 100).toFixed(1) : "0.0";
+
+        resultList.innerHTML += `
+            <div class="card result-card">
+                <img class="result-photo" src="${getPhoto(c)}" alt="${escapeHTML(c.name)}">
+
+                <div>
+                    <h3 style="margin:0 0 5px 0;">
+                        ${c.number}. ${escapeHTML(c.name)} (${escapeHTML(c.className)})
+                    </h3>
+
+                    <div style="font-size:14px;color:var(--muted);">
+                        Perolehan: <b>${votes}</b> suara
+                    </div>
+
+                    <div class="bar">
+                        <div class="bar-fill" style="width:${percent}%"></div>
+                    </div>
+                </div>
+
+                <div class="percent">
+                    ${percent}%
+                </div>
+            </div>
+        `;
+    });
+
+    renderChart(total);
+}
+
+function renderChart(total){
+    const container = document.getElementById("chartContainer");
+    container.innerHTML = "";
+
+    data.candidates.forEach(c=>{
+        const votes = Number(c.votes || 0);
+        const percent = total > 0 ? (votes / total) * 100 : 0;
+
+        container.innerHTML += `
+            <div class="chart-row">
+                <div class="chart-label">
+                    <span>${c.number}. ${escapeHTML(c.name)}</span>
+                    <span>${votes} suara (${percent.toFixed(1)}%)</span>
+                </div>
+
+                <div class="chart-track">
+                    <div class="chart-value" style="width:${percent}%">
+                        ${percent > 5 ? percent.toFixed(1) + '%' : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+}
+
+/* ============================================================
+   ADMIN LOGIN & MANAGEMENT
+============================================================ */
+
+function showAdmin(){
+    showPage("adminPage");
+}
+
+function checkAdmin(){
+    const logged = sessionStorage.getItem("osisAdmin") === "true";
+
+    if(logged){
+        document.getElementById("loginSection").classList.add("hidden");
+        document.getElementById("adminPanel").classList.remove("hidden");
+        renderAdmin();
+    }else{
+        document.getElementById("loginSection").classList.remove("hidden");
+        document.getElementById("adminPanel").classList.add("hidden");
+    }
+}
+
+function adminLogin(){
+    const username = document.getElementById("adminUser").value.trim();
+    const password = document.getElementById("adminPass").value;
+
+    if(username === "admin" && password === "osis123"){
+        sessionStorage.setItem("osisAdmin", "true");
+        checkAdmin();
+    }else{
+        alert("Username atau password salah.");
+    }
+}
+
+function adminLogout(){
+    sessionStorage.removeItem("osisAdmin");
+    checkAdmin();
+}
+
+/* ============================================================
+   ADMIN CANDIDATES MANAGEMENT
+============================================================ */
+
+function renderAdmin(){
+    document.getElementById("settingSchool").value = data.settings.school || "";
+    document.getElementById("settingTitle").value = data.settings.title || "";
+    document.getElementById("settingColor").value = data.settings.color || "#2563eb";
+    document.getElementById("bgOpacity").value = data.settings.bgOpacity || "0.90";
+
+    if(data.settings.logo){
+        document.getElementById("logoPreview").src = data.settings.logo;
+    }
+    if(data.settings.background){
+        document.getElementById("bgPreview").src = data.settings.background;
+    }
+
+    const container = document.getElementById("candidateForms");
+    container.innerHTML = "";
+
+    data.candidates.forEach(c=>{
+        container.innerHTML += `
+        <div class="card" style="margin-bottom:20px;background:#f8fafc">
+
+            <div class="actions-header">
+                <h3 style="margin:0;">Calon Nomor Urut ${c.number}</h3>
+                <button class="btn btn-danger" onclick="deleteCandidate(${c.id})">
+                    🗑️ Hapus Calon
+                </button>
+            </div>
+
+            <div class="form-grid">
+
+                <div>
+                    <label for="name_${c.id}">Nama Calon</label>
+                    <input id="name_${c.id}" value="${escapeAttribute(c.name)}">
+
+                    <label for="class_${c.id}">Kelas / Jurusan</label>
+                    <input id="class_${c.id}" value="${escapeAttribute(c.className)}">
+
+                    <label for="vision_${c.id}">Visi</label>
+                    <textarea id="vision_${c.id}">${escapeHTML(c.vision)}</textarea>
+                </div>
+
+                <div>
+                    <label for="mission_${c.id}">Misi</label>
+                    <textarea id="mission_${c.id}">${escapeHTML(c.mission)}</textarea>
+
+                    <label>Foto Calon</label>
+                    <input type="file" accept="image/*" onchange="loadCandidatePhoto(event,${c.id})">
+
+                    <img id="photoPreview_${c.id}" class="preview" src="${getPhoto(c)}" alt="Preview Foto">
+                </div>
+
+            </div>
+
+            <button class="btn btn-success" onclick="saveCandidate(${c.id})">
+                💾 Simpan Data Calon ${c.number}
+            </button>
+
+        </div>
+        `;
+    });
+}
+
+function addCandidate(){
+    const nextId = data.candidates.length > 0 ? Math.max(...data.candidates.map(c=>c.id)) + 1 : 1;
+    const nextNumber = data.candidates.length + 1;
+
+    data.candidates.push({
+        id: nextId,
+        number: nextNumber,
+        name: "Nama Calon Baru",
+        className: "Kelas XX",
+        vision: "Visi calon...",
+        mission: "Misi calon...",
+        photo: "",
+        votes: 0
+    });
+
+    saveData();
+    renderAdmin();
+    renderCandidates();
+}
+
+function deleteCandidate(id){
+    if(confirm("Apakah Anda yakin ingin menghapus calon ini?")){
+        data.candidates = data.candidates.filter(c => c.id !== id);
+
+        // Re-number candidates sequentially
+        data.candidates.forEach((c, idx) => {
+            c.number = idx + 1;
+        });
+
+        saveData();
+        renderAdmin();
+        renderCandidates();
+    }
+}
+
+function saveCandidate(id){
+    const c = data.candidates.find(c=>c.id === id);
+
+    if(!c){
+        return;
+    }
+
+    c.name = document.getElementById("name_"+id).value;
+    c.className = document.getElementById("class_"+id).value;
+    c.vision = document.getElementById("vision_"+id).value;
+    c.mission = document.getElementById("mission_"+id).value;
+
+    saveData();
+    renderCandidates();
+    alert("Data calon nomor " + c.number + " berhasil disimpan.");
+}
+
+function loadCandidatePhoto(event, id){
+    const file = event.target.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+        const c = data.candidates.find(c=>c.id === id);
+        if(c){
+            c.photo = e.target.result;
+            const preview = document.getElementById("photoPreview_"+id);
+            if(preview) preview.src = c.photo;
+            saveData();
+            renderCandidates();
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+/* ============================================================
+   ADMIN SETTINGS & DATA
+============================================================ */
+
+function saveSettings(){
+    data.settings.school = document.getElementById("settingSchool").value;
+    data.settings.title = document.getElementById("settingTitle").value;
+    data.settings.color = document.getElementById("settingColor").value;
+    data.settings.bgOpacity = document.getElementById("bgOpacity").value;
+
+    saveData();
+    applySettings();
+    alert("Pengaturan berhasil disimpan.");
+}
+
+document.getElementById("logoInput").addEventListener("change", function(event){
+    const file = event.target.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+        data.settings.logo = e.target.result;
+        document.getElementById("logoPreview").src = e.target.result;
+        saveData();
+        applySettings();
+    };
+    reader.readAsDataURL(file);
+});
+
+document.getElementById("bgInput").addEventListener("change", function(event){
+    const file = event.target.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+        data.settings.background = e.target.result;
+        document.getElementById("bgPreview").src = e.target.result;
+        saveData();
+        applySettings();
+    };
+    reader.readAsDataURL(file);
+});
+
+function resetVotes(){
+    if(confirm("Apakah Anda yakin ingin mereset SELURUH perolehan suara? Tindakan ini tidak dapat dikembalikan.")){
+        data.candidates.forEach(c => c.votes = 0);
+        localStorage.removeItem("osisHasVoted");
+        saveData();
+        renderCandidates();
+        alert("Seluruh suara berhasil direset ke 0.");
+    }
+}
+
+function resetVoterDevice(){
+    localStorage.removeItem("osisHasVoted");
+    renderCandidates();
+    alert("Status voting pada perangkat ini berhasil dibuka kembali.");
+}
+
+function exportData(){
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+    const dlAnchor = document.createElement('a');
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", `osis_backup_${new Date().toISOString().slice(0,10)}.json`);
+    document.body.appendChild(dlAnchor);
+    dlAnchor.click();
+    dlAnchor.remove();
+}
+
+function importData(event){
+    const file = event.target.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+        try{
+            const imported = JSON.parse(e.target.result);
+            if(imported && imported.settings && imported.candidates){
+                data = imported;
+                saveData();
+                applySettings();
+                renderCandidates();
+                renderAdmin();
+                alert("Data berhasil diimpor.");
+            }else{
+                alert("Format data JSON tidak sesuai.");
+            }
+        }catch(err){
+            alert("Gagal membaca file backup: " + err.message);
+        }
+    };
+    reader.readAsText(file);
+}
+
+/* ============================================================
+   INITIALIZATION
+============================================================ */
+
+document.addEventListener("DOMContentLoaded", function(){
+    applySettings();
+    renderCandidates();
+});
+</script>
+</body>
+</html>
